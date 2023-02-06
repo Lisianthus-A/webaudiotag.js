@@ -1,0 +1,36 @@
+{
+  "name": "webaudiotag.js",
+  "version": "0.1.0",
+  "description": "Use AudioContext just like an `<audio>` tag.",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "browser": "./dist/index.umd.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "rm -rf dist && vite build && tsc"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "WebAudio",
+    "audio",
+    "AudioContext"
+  ],
+  "author": "Lisianthus-A",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lisianthus-a/webaudiotag.js"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.9.5",
+    "vite": "^4.0.4"
+  }
+}
