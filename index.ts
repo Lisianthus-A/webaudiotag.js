@@ -25,6 +25,7 @@ const defaultConfig: Required<Config> = {
 class WebAudioTag extends EventBus {
   private ctx: AudioContext;
   private gainNode: GainNode;
+  private timer: number = 0;
   private rejectPlay: (() => void) | null = null;
   private abortController = new AbortController();
   private startTime: number | false = false;
@@ -108,7 +109,7 @@ class WebAudioTag extends EventBus {
       this.gainNode.gain.value = value;
     }
 
-    this.emit("playStateChange", {
+    this.emit("volumeChange", {
       type: "volumeChange",
       volume: this.volume,
     });
@@ -236,6 +237,12 @@ class WebAudioTag extends EventBus {
     // restart
     if (this.paused) {
       await this.ctx.resume();
+      this.timer = setInterval(() => {
+        this.emit("timeUpdate", {
+          type: "timeUpdate",
+          currentTime: this.currentTime,
+        });
+      }, 250);
       this.emit("playStateChange", {
         type: "playStateChange",
         state: this.playState,
@@ -285,6 +292,7 @@ class WebAudioTag extends EventBus {
           type: "playStateChange",
           state: this.playState,
         });
+        clearInterval(this.timer);
         this.current.ended = true;
         this.emit("ended", { type: "ended" });
         this._loop && this.play();
@@ -301,6 +309,7 @@ class WebAudioTag extends EventBus {
     }
 
     await this.ctx.suspend();
+    clearInterval(this.timer);
     this.emit("playStateChange", {
       type: "playStateChange",
       state: this.playState,
