@@ -128,6 +128,10 @@ class WebAudioTag extends EventBus {
       return;
     }
 
+    if (this.src === value) {
+      return;
+    }
+
     this._src = value;
     if (!this.paused && this._src) {
       this.play();
@@ -177,17 +181,22 @@ class WebAudioTag extends EventBus {
     return "playing";
   }
 
-  private async getAudioBuffer() {
-    const fetcher = this.fetchBuffer || this.getArrayBuffer;
-    const arrayBuffer = await fetcher(this._src);
-    if (!arrayBuffer) {
-      return null;
-    }
+  get sourceNode() {
+    return this.current.node;
+  }
 
+  private async getAudioBuffer() {
     let rejectCall = false;
     this.reject = () => {
       rejectCall = true;
     };
+
+    const fetcher = this.fetchBuffer || this.getArrayBuffer;
+    const arrayBuffer = await fetcher(this._src);
+    if (rejectCall || !arrayBuffer) {
+      return null;
+    }
+
     const audioBuffer = await this.ctx
       .decodeAudioData(arrayBuffer)
       .then((buffer) => (rejectCall ? null : buffer))
@@ -260,7 +269,7 @@ class WebAudioTag extends EventBus {
     // restart
     if (this.paused) {
       await this.ctx.resume();
-      this.timer = setInterval(() => {
+      this.timer = window.setInterval(() => {
         this.emit("timeUpdate", {
           type: "timeUpdate",
           currentTime: this.currentTime,

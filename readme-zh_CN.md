@@ -18,7 +18,7 @@ $ npm install webaudiotag.js
 import WebAudioTag from "WebAudioTag.js";
 
 const webAudioTag = new WebAudioTag({
-    src: "http://example.com/sound.mp3",
+  src: "http://example.com/sound.mp3",
 });
 // 或者
 // webAudioTag.src = "http://example.com/sound.mp3";
@@ -39,16 +39,18 @@ webAudioTag.play();
 
 ## 属性
 
-| key                  | 类型                  | 说明                               |
-| -------------------- | --------------------- | ---------------------------------- |
-| instance.currentTime | number                | 以秒为单位，返回音频当前的播放时间 |
-| instance.duration    | number                | 只读，以秒为单位，返回音频的总时长 |
-| instance.volume      | number                | 参见 `config.volume`               |
-| instance.src         | string                | 参见 `config.src`                  |
-| instance.loop        | boolean               | 参见 `config.loop`                 |
-| instance.muted       | boolean               | 参见 `config.muted`                |
-| instance.paused      | boolean               | 只读, 指示音频是否暂停中           |
-| instance.playState   | "paused" \| "playing" | 只读, 指示音频的播放状态           |
+| key                   | 类型                  | 说明                               |
+| --------------------- | --------------------- | ---------------------------------- |
+| instance.currentTime  | number                | 以秒为单位，返回音频当前的播放时间 |
+| instance.duration     | number                | 只读，以秒为单位，返回音频的总时长 |
+| instance.volume       | number                | 参见 `config.volume`               |
+| instance.src          | string                | 参见 `config.src`                  |
+| instance.loop         | boolean               | 参见 `config.loop`                 |
+| instance.muted        | boolean               | 参见 `config.muted`                |
+| instance.paused       | boolean               | 只读, 指示音频是否暂停中           |
+| instance.playState    | "paused" \| "playing" | 只读, 指示音频的播放状态           |
+| instance.sourceNode   |                       |                                    |
+| instance.audioContext |                       |                                    |
 
 ## Methods
 
@@ -110,8 +112,8 @@ webAudioTag.off("playStateChange", handler);
 
 ```ts
 {
-    type: "playStateChange";
-    state: "paused" | "playing";
+  type: "playStateChange";
+  state: "paused" | "playing";
 }
 ```
 
@@ -121,8 +123,8 @@ webAudioTag.off("playStateChange", handler);
 
 ```ts
 {
-    type: "timeUpdate";
-    currentTime: number;
+  type: "timeUpdate";
+  currentTime: number;
 }
 ```
 
@@ -132,8 +134,8 @@ webAudioTag.off("playStateChange", handler);
 
 ```ts
 {
-    type: "volumeChange";
-    volume: number;
+  type: "volumeChange";
+  volume: number;
 }
 ```
 
@@ -143,7 +145,7 @@ webAudioTag.off("playStateChange", handler);
 
 ```ts
 {
-    type: "ended";
+  type: "ended";
 }
 ```
 
@@ -153,10 +155,10 @@ webAudioTag.off("playStateChange", handler);
 
 ```ts
 {
-    type: "progress";
-    src: string;
-    percentage: number;
-    chunked: number;
+  type: "progress";
+  src: string;
+  percentage: number;
+  chunked: number;
 }
 ```
 
@@ -166,7 +168,7 @@ webAudioTag.off("playStateChange", handler);
 
 ```ts
 {
-    type: "loaded";
+  type: "loaded";
 }
 ```
 
@@ -176,8 +178,8 @@ webAudioTag.off("playStateChange", handler);
 
 ```ts
 {
-    type: "error";
-    message: string;
-    error: Error | null;
+  type: "error";
+  message: string;
+  error: Error | null;
 }
 ```

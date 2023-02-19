@@ -18,7 +18,7 @@ Use WebAudioTag.js in your project
 import WebAudioTag from "WebAudioTag.js";
 
 const webAudioTag = new WebAudioTag({
-    src: "http://example.com/sound.mp3",
+  src: "http://example.com/sound.mp3",
 });
 // or
 // webAudioTag.src = "http://example.com/sound.mp3";
@@ -39,16 +39,18 @@ webAudioTag.play();
 
 ## Attributes
 
-| key                  | type                  | description                                                  |
-| -------------------- | --------------------- | ------------------------------------------------------------ |
-| instance.currentTime | number                | Indicating the current playback time of the audio in seconds |
-| instance.duration    | number                | Readonly, indicating the duration of the audio in seconds    |
-| instance.volume      | number                | See `config.volume`                                          |
-| instance.src         | string                | See `config.src`                                             |
-| instance.loop        | boolean               | See `config.loop`                                            |
-| instance.muted       | boolean               | See `config.muted`                                           |
-| instance.paused      | boolean               | Readonly, indicates whether the audio is paused              |
-| instance.playState   | "paused" \| "playing" | Readonly, indicating the state of the audio                  |
+| key                   | type                  | description                                                  |
+| --------------------- | --------------------- | ------------------------------------------------------------ |
+| instance.currentTime  | number                | Indicating the current playback time of the audio in seconds |
+| instance.duration     | number                | Readonly, indicating the duration of the audio in seconds    |
+| instance.volume       | number                | See `config.volume`                                          |
+| instance.src          | string                | See `config.src`                                             |
+| instance.loop         | boolean               | See `config.loop`                                            |
+| instance.muted        | boolean               | See `config.muted`                                           |
+| instance.paused       | boolean               | Readonly, indicates whether the audio is paused              |
+| instance.playState    | "paused" \| "playing" | Readonly, indicating the state of the audio                  |
+| instance.sourceNode   |                       |                                                              |
+| instance.audioContext |                       |                                                              |
 
 ## Methods
 
@@ -110,8 +112,8 @@ Event emmited after playState changed.
 
 ```ts
 {
-    type: "playStateChange";
-    state: "paused" | "playing";
+  type: "playStateChange";
+  state: "paused" | "playing";
 }
 ```
 
@@ -121,8 +123,8 @@ Event emitted after currentTime changed.
 
 ```ts
 {
-    type: "timeUpdate";
-    currentTime: number;
+  type: "timeUpdate";
+  currentTime: number;
 }
 ```
 
@@ -132,8 +134,8 @@ Event emitted after volume changed.
 
 ```ts
 {
-    type: "volumeChange";
-    volume: number;
+  type: "volumeChange";
+  volume: number;
 }
 ```
 
@@ -143,7 +145,7 @@ Event emitted when the end of audio is reached.
 
 ```ts
 {
-    type: "ended";
+  type: "ended";
 }
 ```
 
@@ -153,10 +155,10 @@ Event emitted when the audio data is downloading.
 
 ```ts
 {
-    type: "progress";
-    src: string;
-    percentage: number;
-    chunked: number;
+  type: "progress";
+  src: string;
+  percentage: number;
+  chunked: number;
 }
 ```
 
@@ -166,7 +168,7 @@ Event emitted when the audio data is loaded.
 
 ```ts
 {
-    type: "loaded";
+  type: "loaded";
 }
 ```
 
@@ -176,8 +178,8 @@ Event emitted when an error occurred.
 
 ```ts
 {
-    type: "error";
-    message: string;
-    error: Error | null;
+  type: "error";
+  message: string;
+  error: Error | null;
 }
 ```
