@@ -197,6 +197,12 @@ class WebAudioTag extends EventBus {
       return null;
     }
 
+    if (fetcher === this.getArrayBuffer) {
+      this.reject = () => {
+        rejectCall = true;
+      };
+    }
+
     const audioBuffer = await this.ctx
       .decodeAudioData(arrayBuffer)
       .then((buffer) => (rejectCall ? null : buffer))
