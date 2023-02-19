@@ -6,6 +6,7 @@ interface Config {
   loop?: boolean;
   muted?: boolean;
   extraNode?: AudioNode[];
+  fetchBuffer?: (src: string) => Promise<ArrayBuffer | null>;
 }
 
 interface Current {
@@ -14,7 +15,7 @@ interface Current {
   ended: boolean;
 }
 
-const defaultConfig: Required<Config> = {
+const defaultConfig: Required<Omit<Config, "fetchBuffer">> = {
   src: "",
   volume: 1,
   loop: false,
@@ -26,7 +27,8 @@ class WebAudioTag extends EventBus {
   private ctx: AudioContext;
   private gainNode: GainNode;
   private timer: number = 0;
-  private rejectPlay: (() => void) | null = null;
+  private reject: (() => void) | null = null;
+  private fetchBuffer?: (src: string) => Promise<ArrayBuffer | null>;
   private abortController = new AbortController();
   private startTime: number | false = false;
   private current: Current = {
@@ -62,6 +64,7 @@ class WebAudioTag extends EventBus {
     this.src = _config.src;
     this.loop = _config.loop;
     this.muted = _config.muted;
+    this.fetchBuffer = _config.fetchBuffer;
   }
 
   get currentTime() {
@@ -175,49 +178,18 @@ class WebAudioTag extends EventBus {
   }
 
   private async getAudioBuffer() {
-    this.rejectPlay = () => {
-      this.abortController.abort();
-      this.abortController = new AbortController();
-    };
-    const res = await fetch(this._src, {
-      signal: this.abortController.signal,
-    });
-    if (!res.body) {
+    const fetcher = this.fetchBuffer || this.getArrayBuffer;
+    const arrayBuffer = await fetcher(this._src);
+    if (!arrayBuffer) {
       return null;
-    }
-    const reader = res.body.getReader();
-    const totalLength = Number(res.headers.get("content-length")) || 0;
-    let receivedLength = 0;
-    const chunks: Uint8Array[] = [];
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) {
-        break;
-      }
-
-      chunks.push(value);
-      receivedLength += value.length;
-      this.emit("progress", {
-        type: "progress",
-        src: this._src,
-        percentage: totalLength ? (receivedLength / totalLength) * 100 : 0,
-        chunked: receivedLength,
-      });
-    }
-
-    const unit8Array = new Uint8Array(receivedLength);
-    let position = 0;
-    for (let i = 0; i < chunks.length; ++i) {
-      unit8Array.set(chunks[i], position);
-      position += chunks[i].length;
     }
 
     let rejectCall = false;
-    this.rejectPlay = () => {
+    this.reject = () => {
       rejectCall = true;
     };
     const audioBuffer = await this.ctx
-      .decodeAudioData(unit8Array.buffer)
+      .decodeAudioData(arrayBuffer)
       .then((buffer) => (rejectCall ? null : buffer))
       .catch((err) => {
         this.emit("error", {
@@ -228,9 +200,60 @@ class WebAudioTag extends EventBus {
         return null;
       });
 
-    this.rejectPlay = null;
+    this.reject = null;
     audioBuffer && this.emit("loaded", { type: "loaded" });
     return audioBuffer;
+  }
+
+  private async getArrayBuffer(src: string) {
+    this.reject = () => {
+      this.abortController.abort();
+      this.abortController = new AbortController();
+    };
+    return fetch(src, {
+      signal: this.abortController.signal,
+    })
+      .then(async (res) => {
+        if (!res.body) {
+          return null;
+        }
+        const reader = res.body.getReader();
+        const totalLength = Number(res.headers.get("content-length")) || 0;
+        let receivedLength = 0;
+        const chunks: Uint8Array[] = [];
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) {
+            break;
+          }
+
+          chunks.push(value);
+          receivedLength += value.length;
+          this.emit("progress", {
+            type: "progress",
+            src,
+            percentage: totalLength ? (receivedLength / totalLength) * 100 : 0,
+            chunked: receivedLength,
+          });
+        }
+
+        const unit8Array = new Uint8Array(receivedLength);
+        let position = 0;
+        for (let i = 0; i < chunks.length; ++i) {
+          unit8Array.set(chunks[i], position);
+          position += chunks[i].length;
+        }
+
+        return unit8Array.buffer;
+      })
+      .catch((err) => {
+        this.emit("error", {
+          type: "error",
+          message: "[WebAudioTag]: failed to get ArrayBuffer.",
+          error: err,
+        });
+        return null;
+      });
   }
 
   async play(offset?: number) {
@@ -253,9 +276,9 @@ class WebAudioTag extends EventBus {
     }
 
     // abort previous play call
-    if (this.rejectPlay) {
-      this.rejectPlay();
-      this.rejectPlay = null;
+    if (this.reject) {
+      this.reject();
+      this.reject = null;
     }
 
     let audioBuffer: AudioBuffer | null = null;

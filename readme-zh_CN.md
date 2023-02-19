@@ -18,7 +18,7 @@ $ npm install webaudiotag.js
 import WebAudioTag from "WebAudioTag.js";
 
 const webAudioTag = new WebAudioTag({
-  src: "http://example.com/sound.mp3",
+    src: "http://example.com/sound.mp3",
 });
 // 或者
 // webAudioTag.src = "http://example.com/sound.mp3";
@@ -28,13 +28,14 @@ webAudioTag.play();
 
 ## 配置
 
-| key              | 类型        | 默认值 | 说明                                 |
-| ---------------- | ----------- | ------ | ------------------------------------ |
-| config.src       | string      | ""     | 音频的 url 地址                      |
-| config.volume    | number      | 1      | 音频的音量，值为 0 ~ 1 之间的数      |
-| config.loop      | boolean     | false  | 是否循环播放                         |
-| config.muted     | boolean     | false  | 音频是否被静音                       |
-| config.extraNode | AudioNode[] | []     | 你想要连接到 AudioContext 的额外节点 |
+| key                | 类型                                           | 默认值    | 说明                                 |
+| ------------------ | ---------------------------------------------- | --------- | ------------------------------------ |
+| config.src         | string                                         | ""        | 音频的 url 地址                      |
+| config.volume      | number                                         | 1         | 音频的音量，值为 0 ~ 1 之间的数      |
+| config.loop        | boolean                                        | false     | 是否循环播放                         |
+| config.muted       | boolean                                        | false     | 音频是否被静音                       |
+| config.extraNode   | AudioNode[]                                    | []        | 你想要连接到 AudioContext 的额外节点 |
+| config.fetchBuffer | (src: string) => Promise<ArrayBuffer \| null>; | undefined |                                      |
 
 ## 属性
 
@@ -109,8 +110,8 @@ webAudioTag.off("playStateChange", handler);
 
 ```ts
 {
-  type: "playStateChange";
-  state: "paused" | "playing";
+    type: "playStateChange";
+    state: "paused" | "playing";
 }
 ```
 
@@ -120,8 +121,8 @@ webAudioTag.off("playStateChange", handler);
 
 ```ts
 {
-  type: "timeUpdate";
-  currentTime: number;
+    type: "timeUpdate";
+    currentTime: number;
 }
 ```
 
@@ -131,8 +132,8 @@ webAudioTag.off("playStateChange", handler);
 
 ```ts
 {
-  type: "volumeChange";
-  volume: number;
+    type: "volumeChange";
+    volume: number;
 }
 ```
 
@@ -142,7 +143,7 @@ webAudioTag.off("playStateChange", handler);
 
 ```ts
 {
-  type: "ended";
+    type: "ended";
 }
 ```
 
@@ -152,10 +153,10 @@ webAudioTag.off("playStateChange", handler);
 
 ```ts
 {
-  type: "progress";
-  src: string;
-  percentage: number;
-  chunked: number;
+    type: "progress";
+    src: string;
+    percentage: number;
+    chunked: number;
 }
 ```
 
@@ -165,7 +166,7 @@ webAudioTag.off("playStateChange", handler);
 
 ```ts
 {
-  type: "loaded";
+    type: "loaded";
 }
 ```
 
@@ -175,8 +176,8 @@ webAudioTag.off("playStateChange", handler);
 
 ```ts
 {
-  type: "error";
-  message: string;
-  error: Error | null;
+    type: "error";
+    message: string;
+    error: Error | null;
 }
 ```

@@ -18,7 +18,7 @@ Use WebAudioTag.js in your project
 import WebAudioTag from "WebAudioTag.js";
 
 const webAudioTag = new WebAudioTag({
-  src: "http://example.com/sound.mp3",
+    src: "http://example.com/sound.mp3",
 });
 // or
 // webAudioTag.src = "http://example.com/sound.mp3";
@@ -28,13 +28,14 @@ webAudioTag.play();
 
 ## Config
 
-| key              | type        | default | description                                                      |
-| ---------------- | ----------- | ------- | ---------------------------------------------------------------- |
-| config.src       | string      | ""      | The url of audio                                                 |
-| config.volume    | number      | 1       | The volume of audio, must fall between 0 and 1                   |
-| config.loop      | boolean     | false   | If the value is true, the audio will loop playback automatically |
-| config.muted     | boolean     | false   | Indicates whether the audio is muted                             |
-| config.extraNode | AudioNode[] | []      | The extra node that you want to connect to AudioContext          |
+| key                | type                                           | default   | description                                                      |
+| ------------------ | ---------------------------------------------- | --------- | ---------------------------------------------------------------- |
+| config.src         | string                                         | ""        | The url of audio                                                 |
+| config.volume      | number                                         | 1         | The volume of audio, must fall between 0 and 1                   |
+| config.loop        | boolean                                        | false     | If the value is true, the audio will loop playback automatically |
+| config.muted       | boolean                                        | false     | Indicates whether the audio is muted                             |
+| config.extraNode   | AudioNode[]                                    | []        | The extra node that you want to connect to AudioContext          |
+| config.fetchBuffer | (src: string) => Promise<ArrayBuffer \| null>; | undefined |                                                                  |
 
 ## Attributes
 
@@ -109,8 +110,8 @@ Event emmited after playState changed.
 
 ```ts
 {
-  type: "playStateChange";
-  state: "paused" | "playing";
+    type: "playStateChange";
+    state: "paused" | "playing";
 }
 ```
 
@@ -120,8 +121,8 @@ Event emitted after currentTime changed.
 
 ```ts
 {
-  type: "timeUpdate";
-  currentTime: number;
+    type: "timeUpdate";
+    currentTime: number;
 }
 ```
 
@@ -131,8 +132,8 @@ Event emitted after volume changed.
 
 ```ts
 {
-  type: "volumeChange";
-  volume: number;
+    type: "volumeChange";
+    volume: number;
 }
 ```
 
@@ -142,7 +143,7 @@ Event emitted when the end of audio is reached.
 
 ```ts
 {
-  type: "ended";
+    type: "ended";
 }
 ```
 
@@ -152,10 +153,10 @@ Event emitted when the audio data is downloading.
 
 ```ts
 {
-  type: "progress";
-  src: string;
-  percentage: number;
-  chunked: number;
+    type: "progress";
+    src: string;
+    percentage: number;
+    chunked: number;
 }
 ```
 
@@ -165,7 +166,7 @@ Event emitted when the audio data is loaded.
 
 ```ts
 {
-  type: "loaded";
+    type: "loaded";
 }
 ```
 
@@ -175,8 +176,8 @@ Event emitted when an error occurred.
 
 ```ts
 {
-  type: "error";
-  message: string;
-  error: Error | null;
+    type: "error";
+    message: string;
+    error: Error | null;
 }
 ```
