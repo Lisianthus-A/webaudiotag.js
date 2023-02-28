@@ -28,14 +28,14 @@ webAudioTag.play();
 
 ## Config
 
-| key                | type                                           | default   | description                                                      |
-| ------------------ | ---------------------------------------------- | --------- | ---------------------------------------------------------------- |
-| config.src         | string                                         | ""        | The url of audio                                                 |
-| config.volume      | number                                         | 1         | The volume of audio, must fall between 0 and 1                   |
-| config.loop        | boolean                                        | false     | If the value is true, the audio will loop playback automatically |
-| config.muted       | boolean                                        | false     | Indicates whether the audio is muted                             |
-| config.extraNode   | AudioNode[]                                    | []        | The extra node that you want to connect to AudioContext          |
-| config.fetchBuffer | (src: string) => Promise<ArrayBuffer \| null>; | undefined |                                                                  |
+| key                | type                                           | default   | description                                                                    |
+| ------------------ | ---------------------------------------------- | --------- | ------------------------------------------------------------------------------ |
+| config.src         | string                                         | ""        | The url of audio                                                               |
+| config.volume      | number                                         | 1         | The volume of audio, must fall between 0 and 1                                 |
+| config.loop        | boolean                                        | false     | If the value is true, the audio will loop playback automatically               |
+| config.muted       | boolean                                        | false     | Indicates whether the audio is muted                                           |
+| config.extraNode   | AudioNode[]                                    | []        | The extra node that you want to connect to AudioContext                        |
+| config.fetchBuffer | (src: string) => Promise<ArrayBuffer \| null>; | undefined | If you want to customize the request to get resources, you can use this config |
 
 ## Attributes
 

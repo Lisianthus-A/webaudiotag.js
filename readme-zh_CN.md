@@ -28,14 +28,14 @@ webAudioTag.play();
 
 ## 配置
 
-| key                | 类型                                           | 默认值    | 说明                                 |
-| ------------------ | ---------------------------------------------- | --------- | ------------------------------------ |
-| config.src         | string                                         | ""        | 音频的 url 地址                      |
-| config.volume      | number                                         | 1         | 音频的音量，值为 0 ~ 1 之间的数      |
-| config.loop        | boolean                                        | false     | 是否循环播放                         |
-| config.muted       | boolean                                        | false     | 音频是否被静音                       |
-| config.extraNode   | AudioNode[]                                    | []        | 你想要连接到 AudioContext 的额外节点 |
-| config.fetchBuffer | (src: string) => Promise<ArrayBuffer \| null>; | undefined |                                      |
+| key                | 类型                                           | 默认值    | 说明                                           |
+| ------------------ | ---------------------------------------------- | --------- | ---------------------------------------------- |
+| config.src         | string                                         | ""        | 音频的 url 地址                                |
+| config.volume      | number                                         | 1         | 音频的音量，值为 0 ~ 1 之间的数                |
+| config.loop        | boolean                                        | false     | 是否循环播放                                   |
+| config.muted       | boolean                                        | false     | 音频是否被静音                                 |
+| config.extraNode   | AudioNode[]                                    | []        | 你想要连接到 AudioContext 的额外节点           |
+| config.fetchBuffer | (src: string) => Promise<ArrayBuffer \| null>; | undefined | 如果你想要自定义获取资源的请求，可以使用此配置 |
 
 ## 属性
 
