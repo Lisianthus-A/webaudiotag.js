@@ -24,7 +24,7 @@ const defaultConfig: Required<Omit<Config, "fetchBuffer">> = {
 };
 
 class WebAudioTag extends EventBus {
-  private ctx: AudioContext;
+  private _ctx: AudioContext;
   private gainNode: GainNode;
   private timer: number = 0;
   private reject: (() => void) | null = null;
@@ -58,7 +58,7 @@ class WebAudioTag extends EventBus {
       gainNode.connect(ctx.destination);
     }
 
-    this.ctx = ctx;
+    this._ctx = ctx;
     this.gainNode = gainNode;
     this.volume = _config.volume;
     this.src = _config.src;
@@ -72,7 +72,7 @@ class WebAudioTag extends EventBus {
       return 0;
     }
 
-    return this.ctx.currentTime - this.startTime;
+    return this._ctx.currentTime - this.startTime;
   }
 
   set currentTime(value: number) {
@@ -170,7 +170,7 @@ class WebAudioTag extends EventBus {
   }
 
   get paused() {
-    return this.ctx.state === "suspended";
+    return this._ctx.state === "suspended";
   }
 
   get playState() {
@@ -185,6 +185,10 @@ class WebAudioTag extends EventBus {
     return this.current.node;
   }
 
+  get ctx() {
+    return this._ctx;
+  }
+
   private async getAudioBuffer() {
     let rejectCall = false;
     this.reject = () => {
@@ -193,7 +197,17 @@ class WebAudioTag extends EventBus {
 
     const fetcher = this.fetchBuffer || this.getArrayBuffer;
     const arrayBuffer = await fetcher(this._src);
-    if (rejectCall || !arrayBuffer) {
+    if (rejectCall || arrayBuffer === null) {
+      return null;
+    }
+
+    if (!(arrayBuffer instanceof ArrayBuffer)) {
+      console.error("[WebAudioTag]: the result of fetchBuffer must be an ArrayBuffer.");
+      this.emit("error", {
+        type: "error",
+        message: "[WebAudioTag]: the result of fetchBuffer must be an ArrayBuffer.",
+        error: null,
+      });
       return null;
     }
 
@@ -203,7 +217,7 @@ class WebAudioTag extends EventBus {
       };
     }
 
-    const audioBuffer = await this.ctx
+    const audioBuffer = await this._ctx
       .decodeAudioData(arrayBuffer)
       .then((buffer) => (rejectCall ? null : buffer))
       .catch((err) => {
@@ -274,7 +288,7 @@ class WebAudioTag extends EventBus {
   async play(offset?: number) {
     // restart
     if (this.paused) {
-      await this.ctx.resume();
+      await this._ctx.resume();
       this.timer = window.setInterval(() => {
         this.emit("timeUpdate", {
           type: "timeUpdate",
@@ -316,16 +330,16 @@ class WebAudioTag extends EventBus {
 
     // create sourceNode & play
     if (audioBuffer) {
-      const source = this.ctx.createBufferSource();
+      const source = this._ctx.createBufferSource();
       source.buffer = audioBuffer;
       source.connect(this.gainNode);
       this.current = { url: this._src, node: source, ended: false };
 
-      this.startTime = this.ctx.currentTime - (offset || 0);
-      source.start(this.ctx.currentTime, offset || 0);
+      this.startTime = this._ctx.currentTime - (offset || 0);
+      source.start(this._ctx.currentTime, offset || 0);
       source.onended = () => {
         this.startTime = false;
-        this.ctx.suspend();
+        this._ctx.suspend();
         this.emit("playStateChange", {
           type: "playStateChange",
           state: this.playState,
@@ -342,11 +356,11 @@ class WebAudioTag extends EventBus {
   }
 
   async pause() {
-    if (this.ctx.state === "suspended") {
+    if (this._ctx.state === "suspended") {
       return false;
     }
 
-    await this.ctx.suspend();
+    await this._ctx.suspend();
     clearInterval(this.timer);
     this.emit("playStateChange", {
       type: "playStateChange",

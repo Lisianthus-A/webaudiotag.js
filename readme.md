@@ -39,18 +39,18 @@ webAudioTag.play();
 
 ## Attributes
 
-| key                   | type                  | description                                                  |
-| --------------------- | --------------------- | ------------------------------------------------------------ |
-| instance.currentTime  | number                | Indicating the current playback time of the audio in seconds |
-| instance.duration     | number                | Readonly, indicating the duration of the audio in seconds    |
-| instance.volume       | number                | See `config.volume`                                          |
-| instance.src          | string                | See `config.src`                                             |
-| instance.loop         | boolean               | See `config.loop`                                            |
-| instance.muted        | boolean               | See `config.muted`                                           |
-| instance.paused       | boolean               | Readonly, indicates whether the audio is paused              |
-| instance.playState    | "paused" \| "playing" | Readonly, indicating the state of the audio                  |
-| instance.sourceNode   |                       |                                                              |
-| instance.audioContext |                       |                                                              |
+| key                  | type                          | description                                                  |
+| -------------------- | ----------------------------- | ------------------------------------------------------------ |
+| instance.currentTime | number                        | Indicating the current playback time of the audio in seconds |
+| instance.duration    | number                        | Readonly, indicating the duration of the audio in seconds    |
+| instance.volume      | number                        | See `config.volume`                                          |
+| instance.src         | string                        | See `config.src`                                             |
+| instance.loop        | boolean                       | See `config.loop`                                            |
+| instance.muted       | boolean                       | See `config.muted`                                           |
+| instance.paused      | boolean                       | Readonly, indicates whether the audio is paused              |
+| instance.playState   | "paused" \| "playing"         | Readonly, indicating the state of the audio                  |
+| instance.sourceNode  | AudioBufferSourceNode \| null | Readonly, current audio source node                          |
+| instance.ctx         | AudioContext                  | Readonly, current AudioContext                               |
 
 ## Methods
 

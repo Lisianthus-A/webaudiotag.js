@@ -39,18 +39,18 @@ webAudioTag.play();
 
 ## 属性
 
-| key                   | 类型                  | 说明                               |
-| --------------------- | --------------------- | ---------------------------------- |
-| instance.currentTime  | number                | 以秒为单位，返回音频当前的播放时间 |
-| instance.duration     | number                | 只读，以秒为单位，返回音频的总时长 |
-| instance.volume       | number                | 参见 `config.volume`               |
-| instance.src          | string                | 参见 `config.src`                  |
-| instance.loop         | boolean               | 参见 `config.loop`                 |
-| instance.muted        | boolean               | 参见 `config.muted`                |
-| instance.paused       | boolean               | 只读, 指示音频是否暂停中           |
-| instance.playState    | "paused" \| "playing" | 只读, 指示音频的播放状态           |
-| instance.sourceNode   |                       |                                    |
-| instance.audioContext |                       |                                    |
+| key                  | 类型                          | 说明                               |
+| -------------------- | ----------------------------- | ---------------------------------- |
+| instance.currentTime | number                        | 以秒为单位，音频当前的播放时间     |
+| instance.duration    | number                        | 只读，以秒为单位，返回音频的总时长 |
+| instance.volume      | number                        | 参见 `config.volume`               |
+| instance.src         | string                        | 参见 `config.src`                  |
+| instance.loop        | boolean                       | 参见 `config.loop`                 |
+| instance.muted       | boolean                       | 参见 `config.muted`                |
+| instance.paused      | boolean                       | 只读, 指示音频是否暂停中           |
+| instance.playState   | "paused" \| "playing"         | 只读, 指示音频的播放状态           |
+| instance.sourceNode  | AudioBufferSourceNode \| null | 只读，当前的音频源节点             |
+| instance.ctx         | AudioContext                  | 只读，当前的 AudioContext          |
 
 ## Methods
 
