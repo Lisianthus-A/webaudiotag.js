@@ -211,7 +211,7 @@ class WebAudioTag extends EventBus {
       return null;
     }
 
-    if (fetcher === this.getArrayBuffer) {
+    if (fetcher !== this.getArrayBuffer) {
       this.reject = () => {
         rejectCall = true;
       };
