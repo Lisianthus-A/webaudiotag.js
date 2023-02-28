@@ -228,6 +228,9 @@ class WebAudioTag extends EventBus {
         });
         return null;
       });
+    if (audioBuffer === null) {
+      return null;
+    }
 
     this.reject = null;
     audioBuffer && this.emit("loaded", { type: "loaded" });
