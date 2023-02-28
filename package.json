@@ -1,6 +1,6 @@
 {
   "name": "webaudiotag.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Use AudioContext just like an `<audio>` tag.",
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
